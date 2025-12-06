@@ -27,11 +27,10 @@ interface Stall {
 
 export default function FindFoodNearby() {
   const [location, setLocation] = useState("Sunway Pyramid");
-  const [hasSearched, setHasSearched] = useState(false);
 
-  // Compute recommended shops based on location using useMemo
+  // Compute recommended shops based on location - auto-loads on mount and when location changes
   const recommendedShops: Stall[] = useMemo(() => {
-    if (!location || !hasSearched) return [];
+    if (!location) return [];
 
     // Filter shops by location and sort by distance (closest first)
     return nearbyMealsData.stalls
@@ -44,11 +43,7 @@ export default function FindFoodNearby() {
       )
       .sort((a, b) => a.distance_m - b.distance_m)
       .slice(0, 10); // Show top 10 closest shops
-  }, [location, hasSearched]);
-
-  const handleSearch = () => {
-    setHasSearched(true);
-  };
+  }, [location]);
 
   return (
     <div className="space-y-6 pb-20 bg-gradient-to-b from-green-50/30 to-white">
@@ -89,7 +84,7 @@ export default function FindFoodNearby() {
               />
             </div>
             <Button
-              onClick={handleSearch}
+              type="button"
               size="lg"
               className="h-12 bg-gradient-to-r from-primary to-green-600 hover:from-primary/90 hover:to-green-600/90 shadow-lg hover:shadow-xl transition-all"
             >
