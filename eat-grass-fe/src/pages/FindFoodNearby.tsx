@@ -1,63 +1,54 @@
-import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Badge } from '@/components/ui/badge'
-import { MapPin, Clock, Navigation, Search, Utensils } from 'lucide-react'
-import nearbyMealsData from '@/data/nearby_meals.json'
+import { useState, useMemo } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { MapPin, Clock, Navigation, Search, Utensils } from "lucide-react";
+import nearbyMealsData from "@/data/nearby_meals.json";
 
 interface Meal {
-  meal_id: number
-  name: string
-  price: number
-  calories: number
-  image: string
-  ingredients: string[]
+  meal_id: number;
+  name: string;
+  price: number;
+  calories: number;
+  image: string;
+  ingredients: string[];
 }
 
 interface Stall {
-  stall_id: number
-  name: string
-  location_detail: string
-  distance_m: number
-  operating_hours: string
-  popular_meals: string[]
-  meals: Meal[]
+  stall_id: number;
+  name: string;
+  location_detail: string;
+  distance_m: number;
+  operating_hours: string;
+  popular_meals: string[];
+  meals: Meal[];
 }
 
 export default function FindFoodNearby() {
-  const [location, setLocation] = useState('Sunway Pyramid')
-  const [recommendedShops, setRecommendedShops] = useState<Stall[]>([])
+  const [location, setLocation] = useState("Sunway Pyramid");
+  const [hasSearched, setHasSearched] = useState(false);
 
-  // Load recommended shops based on location
-  useEffect(() => {
-    if (location) {
-      // Filter shops by location and sort by distance (closest first)
-      const shops = nearbyMealsData.stalls
-        .filter((stall) => 
-          stall.location_detail.toLowerCase().includes(location.toLowerCase()) ||
-          location.toLowerCase().includes('sunway')
-        )
-        .sort((a, b) => a.distance_m - b.distance_m)
-        .slice(0, 10) // Show top 10 closest shops
-      
-      setRecommendedShops(shops)
-    }
-  }, [location])
+  // Compute recommended shops based on location using useMemo
+  const recommendedShops: Stall[] = useMemo(() => {
+    if (!location || !hasSearched) return [];
 
-  const handleSearch = () => {
-    // Filter shops by location
-    const shops = nearbyMealsData.stalls
-      .filter((stall) => 
-        stall.location_detail.toLowerCase().includes(location.toLowerCase()) ||
-        location.toLowerCase().includes('sunway')
+    // Filter shops by location and sort by distance (closest first)
+    return nearbyMealsData.stalls
+      .filter(
+        (stall) =>
+          stall.location_detail
+            .toLowerCase()
+            .includes(location.toLowerCase()) ||
+          location.toLowerCase().includes("sunway")
       )
       .sort((a, b) => a.distance_m - b.distance_m)
-      .slice(0, 10)
-    
-    setRecommendedShops(shops)
-  }
+      .slice(0, 10); // Show top 10 closest shops
+  }, [location, hasSearched]);
+
+  const handleSearch = () => {
+    setHasSearched(true);
+  };
 
   return (
     <div className="space-y-6 pb-20 bg-gradient-to-b from-green-50/30 to-white">
@@ -79,7 +70,9 @@ export default function FindFoodNearby() {
       {/* Location Search */}
       <Card className="border-2 border-primary/20 shadow-lg bg-gradient-to-br from-white to-green-50/50">
         <CardHeader className="bg-gradient-to-r from-primary/5 to-green-50/50 rounded-t-lg">
-          <CardTitle className="text-primary font-bold text-lg">Enter Your Location</CardTitle>
+          <CardTitle className="text-primary font-bold text-lg">
+            Enter Your Location
+          </CardTitle>
         </CardHeader>
         <CardContent className="pt-6">
           <div className="flex gap-4">
@@ -95,9 +88,9 @@ export default function FindFoodNearby() {
                 className="pl-14 h-12 border-2 border-primary/20 focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
             </div>
-            <Button 
-              onClick={handleSearch} 
-              size="lg" 
+            <Button
+              onClick={handleSearch}
+              size="lg"
               className="h-12 bg-gradient-to-r from-primary to-green-600 hover:from-primary/90 hover:to-green-600/90 shadow-lg hover:shadow-xl transition-all"
             >
               <Search className="mr-2 h-4 w-4" />
@@ -111,13 +104,14 @@ export default function FindFoodNearby() {
       {recommendedShops.length > 0 && (
         <div className="space-y-4">
           <h2 className="text-2xl font-bold text-neutral-800">
-            Recommended Shops Near <span className="text-primary">{location}</span>
+            Recommended Shops Near{" "}
+            <span className="text-primary">{location}</span>
           </h2>
-          
+
           <div className="space-y-6">
             {recommendedShops.map((shop) => (
-              <Card 
-                key={shop.stall_id} 
+              <Card
+                key={shop.stall_id}
                 className="overflow-hidden border-2 border-primary/10 shadow-lg hover:shadow-xl transition-all bg-gradient-to-br from-white to-green-50/30"
               >
                 <CardHeader className="pb-4 bg-gradient-to-r from-primary/5 via-green-50/30 to-primary/5">
@@ -128,18 +122,26 @@ export default function FindFoodNearby() {
                           <Utensils className="h-6 w-6 text-white" />
                         </div>
                         <div className="flex-1">
-                          <CardTitle className="text-xl text-neutral-800 font-bold">{shop.name}</CardTitle>
+                          <CardTitle className="text-xl text-neutral-800 font-bold">
+                            {shop.name}
+                          </CardTitle>
                           <div className="flex flex-wrap items-center gap-3 mt-2 text-sm">
                             <div className="flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 rounded-full">
                               <MapPin className="h-4 w-4 text-blue-600" />
-                              <span className="text-blue-700 font-medium">{shop.location_detail}</span>
+                              <span className="text-blue-700 font-medium">
+                                {shop.location_detail}
+                              </span>
                             </div>
                             <div className="flex items-center gap-1.5 px-2.5 py-1 bg-orange-50 rounded-full">
-                              <span className="text-orange-700 font-medium">{shop.distance_m}m away</span>
+                              <span className="text-orange-700 font-medium">
+                                {shop.distance_m}m away
+                              </span>
                             </div>
                             <div className="flex items-center gap-1.5 px-2.5 py-1 bg-purple-50 rounded-full">
                               <Clock className="h-4 w-4 text-purple-600" />
-                              <span className="text-purple-700 font-medium">{shop.operating_hours}</span>
+                              <span className="text-purple-700 font-medium">
+                                {shop.operating_hours}
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -153,7 +155,9 @@ export default function FindFoodNearby() {
                   <div className="space-y-4">
                     <div className="flex items-center gap-2 mb-4">
                       <div className="h-1 w-8 bg-gradient-to-r from-primary to-green-600 rounded-full"></div>
-                      <h3 className="font-bold text-lg text-neutral-800">Menu</h3>
+                      <h3 className="font-bold text-lg text-neutral-800">
+                        Menu
+                      </h3>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {shop.meals.map((meal) => (
@@ -182,8 +186,8 @@ export default function FindFoodNearby() {
                                 </span>
                                 {meal.ingredients.length > 0 && (
                                   <span className="text-neutral-500 line-clamp-1">
-                                    {meal.ingredients.slice(0, 2).join(', ')}
-                                    {meal.ingredients.length > 2 && '...'}
+                                    {meal.ingredients.slice(0, 2).join(", ")}
+                                    {meal.ingredients.length > 2 && "..."}
                                   </span>
                                 )}
                               </div>
@@ -203,8 +207,8 @@ export default function FindFoodNearby() {
                       </p>
                       <div className="flex flex-wrap gap-2">
                         {shop.popular_meals.map((meal, idx) => (
-                          <Badge 
-                            key={idx} 
+                          <Badge
+                            key={idx}
                             className="text-xs px-3 py-1 bg-gradient-to-r from-primary/10 to-green-50 text-primary border border-primary/20 font-medium hover:from-primary/20 hover:to-green-100 transition-all"
                           >
                             {meal}
@@ -228,7 +232,8 @@ export default function FindFoodNearby() {
               <Navigation className="h-16 w-16 text-primary mx-auto" />
             </div>
             <p className="text-lg font-bold text-neutral-800 mb-2">
-              No shops found near <span className="text-primary">{location}</span>
+              No shops found near{" "}
+              <span className="text-primary">{location}</span>
             </p>
             <p className="text-neutral-600">
               Try searching for a different location
@@ -237,6 +242,5 @@ export default function FindFoodNearby() {
         </Card>
       )}
     </div>
-  )
+  );
 }
-
