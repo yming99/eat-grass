@@ -365,7 +365,7 @@ export default function Profile() {
             <div className="space-y-0.5">
               <Label>Notifications</Label>
               <p className="text-sm text-neutral-600">
-                Receive notifications about meals and deals
+                Receive notifications about meals and offers
               </p>
             </div>
             <Switch

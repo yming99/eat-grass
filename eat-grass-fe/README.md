@@ -1,73 +1,121 @@
-# React + TypeScript + Vite
+# Eat Grass Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend application for the Eat Grass meal planning platform, built with React, TypeScript, and Vite.
 
-Currently, two official plugins are available:
+## Quick Start
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```bash
+# Install dependencies
+npm install
 
-## React Compiler
+# Start development server
+npm run dev
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+# Build for production
+npm run build
 
-## Expanding the ESLint configuration
+# Preview production build
+npm run preview
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Run linter
+npm run lint
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Tech Stack
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **React 19** - Modern React with latest features
+- **TypeScript** - Type-safe development
+- **Vite** - Fast build tool and HMR
+- **React Router v7** - Client-side routing
+- **Tailwind CSS** - Utility-first CSS framework
+- **Radix UI** - Accessible component primitives
+- **shadcn/ui** - High-quality React components
+- **Lucide React** - Icon library
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project Structure
+
 ```
+src/
+├── components/          # Reusable UI components
+│   ├── ui/             # shadcn/ui components
+│   ├── BottomNav.tsx   # Bottom navigation
+│   ├── FeedPost.tsx    # Social feed post component
+│   ├── Footer.tsx      # Footer component
+│   ├── GlowCard.tsx    # Animated card component
+│   ├── MealCard.tsx    # Meal card component
+│   ├── Navbar.tsx      # Top navigation
+│   ├── PriceComparisonModal.tsx  # Price comparison dialog
+│   └── Sidebar.tsx     # Sidebar navigation
+├── contexts/           # React contexts
+│   └── SidebarContext.tsx
+├── data/               # JSON data files
+│   ├── deals.json
+│   ├── feed.json
+│   ├── ingredients.json
+│   ├── meals.json
+│   ├── nearby_meals.json
+│   ├── plan.json
+│   ├── profile.json
+│   ├── saved_plans.json
+│   └── settings.json
+├── hooks/              # Custom React hooks
+│   └── usePullToRefresh.ts
+├── layouts/            # Layout components
+│   └── AppLayout.tsx
+├── lib/                # Utility functions
+│   └── utils.ts
+├── pages/              # Page components
+│   ├── Deals.tsx
+│   ├── Home.tsx
+│   ├── MealDetails.tsx
+│   ├── NearbyBudgetMeals.tsx
+│   ├── Planner.tsx
+│   ├── Profile.tsx
+│   ├── SavedPlans.tsx
+│   ├── Settings.tsx
+│   └── SocialFeed.tsx
+├── App.tsx             # Main app component with routes
+├── main.tsx            # Entry point
+└── index.css           # Global styles
+```
+
+## Features
+
+- 🎨 Modern, responsive UI with Tailwind CSS
+- 📱 Mobile-first design with bottom navigation
+- 🔄 Pull-to-refresh functionality
+- 🎯 Component-based architecture
+- ♿ Accessible components with Radix UI
+- 🎭 Custom animations and transitions
+- 📊 Data-driven meal planning
+
+## Development
+
+The app uses Vite for fast development with Hot Module Replacement (HMR). Changes to components will reflect immediately in the browser.
+
+### Component Development
+
+Components are organized by feature and type:
+- `ui/` - Base UI components from shadcn/ui
+- Feature components in the root of `components/`
+- Page components in `pages/`
+
+### Styling
+
+The project uses Tailwind CSS with a custom configuration. Component styles are co-located with components using Tailwind utility classes.
+
+### TypeScript
+
+Strict TypeScript is enabled. Ensure all components and functions are properly typed.
+
+## Building for Production
+
+```bash
+npm run build
+```
+
+The production build will be output to the `dist/` directory, optimized and ready for deployment.
+
+## ESLint Configuration
+
+The project uses ESLint with TypeScript support. To expand the configuration with type-aware rules, see the [main README](../README.md) for examples.

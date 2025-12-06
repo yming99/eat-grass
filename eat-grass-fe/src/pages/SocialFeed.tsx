@@ -10,18 +10,10 @@ import {
 import FeedPost from '@/components/FeedPost'
 import feedData from '@/data/feed.json'
 import { usePullToRefresh } from '@/hooks/usePullToRefresh'
-import { cn } from '@/lib/utils'
-
-const tabs = ['All', 'Team', 'Gym', 'Products']
 
 export default function SocialFeed() {
-  const [activeTab, setActiveTab] = useState('All')
   const [uploadMenuOpen, setUploadMenuOpen] = useState(false)
-  const [navbarVisible, setNavbarVisible] = useState(true)
   const feedRef = useRef<HTMLDivElement>(null)
-  const [startX, setStartX] = useState(0)
-  const [currentX, setCurrentX] = useState(0)
-  const [isDragging, setIsDragging] = useState(false)
   const lastScrollY = useRef(0)
 
   // Pull to refresh
@@ -34,26 +26,14 @@ export default function SocialFeed() {
     enabled: true,
   })
 
-  // Enhanced feed data with XP and badges
-  const enhancedFeed = feedData.map((post, index) => ({
-    ...post,
-    xpAmount: index % 3 === 0 ? 120 : undefined,
-    xpMessage: index % 3 === 0 ? '+120 XP from Fitness Quest' : undefined,
-    badgeImage: index % 3 === 0 ? '/img/badges/fitness-badge.png' : undefined,
-  }))
+  // Use feed data directly (removed XP/badge enhancements for Instagram-like layout)
+  const enhancedFeed = feedData
 
-  // Handle scroll for infinite scroll and auto-hide navbar
+  // Handle scroll for infinite scroll
   useEffect(() => {
     const handleScroll = () => {
       if (feedRef.current) {
         const { scrollTop, scrollHeight, clientHeight } = feedRef.current
-        
-        // Auto-hide navbar on scroll down
-        if (scrollTop > lastScrollY.current && scrollTop > 100) {
-          setNavbarVisible(false)
-        } else if (scrollTop < lastScrollY.current) {
-          setNavbarVisible(true)
-        }
         lastScrollY.current = scrollTop
         
         // Infinite scroll trigger (when near bottom)
@@ -71,38 +51,6 @@ export default function SocialFeed() {
     }
   }, [])
 
-  // Handle tab swipe
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setStartX(e.touches[0].clientX)
-    setIsDragging(true)
-  }
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) return
-    setCurrentX(e.touches[0].clientX)
-  }
-
-  const handleTouchEnd = () => {
-    if (!isDragging) return
-    
-    const diff = startX - currentX
-    const threshold = 50
-    
-    if (Math.abs(diff) > threshold) {
-      const currentIndex = tabs.indexOf(activeTab)
-      if (diff > 0 && currentIndex < tabs.length - 1) {
-        // Swipe left - next tab
-        setActiveTab(tabs[currentIndex + 1])
-      } else if (diff < 0 && currentIndex > 0) {
-        // Swipe right - previous tab
-        setActiveTab(tabs[currentIndex - 1])
-      }
-    }
-    
-    setIsDragging(false)
-    setCurrentX(0)
-  }
-
   const handleTakePhoto = () => {
     setUploadMenuOpen(false)
     // Handle take photo
@@ -116,7 +64,7 @@ export default function SocialFeed() {
   }
 
   return (
-    <div className="space-y-4 pb-20 relative">
+    <div className="bg-neutral-50 min-h-screen pb-20 relative">
       {/* Pull to Refresh Indicator */}
       {isRefreshing && (
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-white rounded-full shadow-lg p-3">
@@ -124,54 +72,26 @@ export default function SocialFeed() {
         </div>
       )}
 
-      {/* Tabs */}
-      <div
-        className={cn(
-          'sticky top-[60px] md:top-20 bg-white z-40 border-b transition-transform duration-300',
-          !navbarVisible && 'md:-translate-y-full'
-        )}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        <div className="flex overflow-x-auto scrollbar-hide">
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={cn(
-                'px-6 py-3 font-medium text-sm whitespace-nowrap border-b-2 transition-colors',
-                activeTab === tab
-                  ? 'border-primary text-primary'
-                  : 'border-transparent text-neutral-600 hover:text-neutral-900'
-              )}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* Feed */}
       <div
         ref={feedRef}
-        className="space-y-4 px-4 max-h-[calc(100vh-200px)] overflow-y-auto"
+        className="max-h-[calc(100vh-200px)] overflow-y-auto py-4"
       >
-        {enhancedFeed.map((post) => (
-          <FeedPost
-            key={post.id}
-            id={post.id}
-            userName={post.userName}
-            userAvatar={post.userAvatar}
-            timestamp={post.timestamp}
-            xpAmount={post.xpAmount}
-            xpMessage={post.xpMessage}
-            badgeImage={post.badgeImage}
-            photo={post.image}
-            likes={post.likes}
-            comments={post.comments}
-          />
-        ))}
+        <div className="max-w-[614px] mx-auto">
+          {enhancedFeed.map((post) => (
+            <FeedPost
+              key={post.id}
+              id={post.id}
+              userName={post.userName}
+              userAvatar={post.userAvatar}
+              timestamp={post.timestamp}
+              content={post.content}
+              photo={post.image}
+              likes={post.likes}
+              comments={post.comments}
+            />
+          ))}
+        </div>
       </div>
 
       {/* Floating Upload Button */}

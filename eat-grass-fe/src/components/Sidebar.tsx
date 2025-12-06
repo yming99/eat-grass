@@ -1,13 +1,14 @@
 import { Link, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
-import { Menu, X, Home, Calendar, Tag, Save, Users, User, Settings } from 'lucide-react'
+import { Menu, X, Home, Calendar, ChefHat, Navigation, Save, Users, User, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useSidebar } from '@/contexts/SidebarContext'
 
 const navItems = [
   { path: '/', label: 'Home', icon: Home },
   { path: '/planner', label: 'Planner', icon: Calendar },
-  { path: '/deals', label: 'Deals', icon: Tag },
+  { path: '/cook', label: 'Cook', icon: ChefHat },
+  { path: '/find-food-nearby', label: 'Find Food Nearby', icon: Navigation },
   { path: '/saved-plans', label: 'Saved Plans', icon: Save },
   { path: '/social-feed', label: 'Social Feed', icon: Users },
   { path: '/profile', label: 'Profile', icon: User },

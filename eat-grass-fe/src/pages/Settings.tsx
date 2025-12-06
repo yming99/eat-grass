@@ -97,7 +97,7 @@ export default function Settings() {
             <div className="space-y-0.5">
               <Label>Promotional Alerts</Label>
               <p className="text-sm text-neutral-600">
-                Receive notifications about special promotions and deals
+                Receive notifications about special promotions and offers
               </p>
             </div>
             <Switch

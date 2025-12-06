@@ -1,11 +1,11 @@
 import { Link, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
-import { Home, Calendar, Tag, Save, User } from 'lucide-react'
+import { Home, ChefHat, Navigation, Save, User } from 'lucide-react'
 
 const navItems = [
   { path: '/', label: 'Home', icon: Home },
-  { path: '/planner', label: 'Planner', icon: Calendar },
-  { path: '/deals', label: 'Deals', icon: Tag },
+  { path: '/cook', label: 'Cook', icon: ChefHat },
+  { path: '/find-food-nearby', label: 'Nearby', icon: Navigation },
   { path: '/saved-plans', label: 'Saved', icon: Save },
   { path: '/profile', label: 'Profile', icon: User },
 ]

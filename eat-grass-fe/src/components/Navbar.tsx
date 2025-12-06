@@ -1,30 +1,33 @@
-import { Link, useNavigate } from 'react-router-dom'
-import { Search } from 'lucide-react'
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
+import { Link, useNavigate } from "react-router-dom";
+import { Search } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import profileData from '@/data/profile.json'
+} from "@/components/ui/dropdown-menu";
+import profileData from "@/data/profile.json";
 
 export default function Navbar() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const initials = profileData.name
-    .split(' ')
+    .split(" ")
     .map((n) => n[0])
-    .join('')
+    .join("")
     .toUpperCase()
-    .slice(0, 2)
+    .slice(0, 2);
 
   return (
     <nav className="h-[60px] md:h-20 bg-white shadow-md flex items-center fixed top-0 left-0 right-0 z-50">
       <div className="max-w-[1440px] mx-auto w-full px-4 md:px-6 flex items-center justify-between gap-4">
         {/* Left Section - Logo */}
-        <Link to="/" className="text-2xl font-bold text-[#A0C878] flex-shrink-0">
-          eat-grss
+        <Link
+          to="/"
+          className="text-2xl font-bold text-[#A0C878] flex-shrink-0"
+        >
+          eat-grass
         </Link>
 
         {/* Center Section - Search Bar */}
@@ -45,7 +48,10 @@ export default function Navbar() {
             <DropdownMenuTrigger asChild>
               <button className="outline-none focus:outline-none focus:ring-2 focus:ring-primary/20 rounded-full">
                 <Avatar className="h-10 w-10 md:h-12 md:w-12">
-                  <AvatarImage src={profileData.avatar} alt={profileData.name} />
+                  <AvatarImage
+                    src={profileData.avatar}
+                    alt={profileData.name}
+                  />
                   <AvatarFallback className="bg-primary/20 text-primary">
                     {initials}
                   </AvatarFallback>
@@ -53,13 +59,13 @@ export default function Navbar() {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem onClick={() => navigate('/profile')}>
+              <DropdownMenuItem onClick={() => navigate("/profile")}>
                 View Profile
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate('/saved-plans')}>
+              <DropdownMenuItem onClick={() => navigate("/saved-plans")}>
                 Saved Plans
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate('/settings')}>
+              <DropdownMenuItem onClick={() => navigate("/settings")}>
                 Settings
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -71,6 +77,5 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
-  )
+  );
 }
-
