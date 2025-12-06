@@ -1,0 +1,147 @@
+[
+  {
+    "id": "challenge-1",
+    "dish": "Nasi Lemak",
+    "description": "I cook nasi lemak, I need:",
+    "requiredIngredients": [
+      { "name": "Rice", "quantity": "2kg", "unit": "kg" },
+      { "name": "Santan", "quantity": "50ml", "unit": "ml" },
+      { "name": "Pandan Leaves", "quantity": "3 pieces", "unit": "pieces" }
+    ],
+    "options": [
+      {
+        "id": "opt-1",
+        "ingredients": [
+          { "name": "Rice", "quantity": "2kg" },
+          { "name": "Santan", "quantity": "50ml" },
+          { "name": "Pandan Leaves", "quantity": "3 pieces" }
+        ],
+        "correct": true
+      },
+      {
+        "id": "opt-2",
+        "ingredients": [
+          { "name": "Rice", "quantity": "1.5kg" },
+          { "name": "Santan", "quantity": "50ml" },
+          { "name": "Pandan Leaves", "quantity": "3 pieces" }
+        ],
+        "correct": false
+      },
+      {
+        "id": "opt-3",
+        "ingredients": [
+          { "name": "Rice", "quantity": "3kg" },
+          { "name": "Santan", "quantity": "50ml" },
+          { "name": "Pandan Leaves", "quantity": "3 pieces" }
+        ],
+        "correct": false
+      },
+      {
+        "id": "opt-4",
+        "ingredients": [
+          { "name": "Rice", "quantity": "2kg" },
+          { "name": "Santan", "quantity": "30ml" },
+          { "name": "Pandan Leaves", "quantity": "3 pieces" }
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "id": "challenge-2",
+    "dish": "Chicken Rice",
+    "description": "I cook chicken rice, I need:",
+    "requiredIngredients": [
+      { "name": "Chicken", "quantity": "1kg", "unit": "kg" },
+      { "name": "Rice", "quantity": "500g", "unit": "g" },
+      { "name": "Ginger", "quantity": "50g", "unit": "g" }
+    ],
+    "options": [
+      {
+        "id": "opt-1",
+        "ingredients": [
+          { "name": "Chicken", "quantity": "1kg" },
+          { "name": "Rice", "quantity": "500g" },
+          { "name": "Ginger", "quantity": "50g" }
+        ],
+        "correct": true
+      },
+      {
+        "id": "opt-2",
+        "ingredients": [
+          { "name": "Chicken", "quantity": "0.8kg" },
+          { "name": "Rice", "quantity": "500g" },
+          { "name": "Ginger", "quantity": "50g" }
+        ],
+        "correct": false
+      },
+      {
+        "id": "opt-3",
+        "ingredients": [
+          { "name": "Chicken", "quantity": "1kg" },
+          { "name": "Rice", "quantity": "300g" },
+          { "name": "Ginger", "quantity": "50g" }
+        ],
+        "correct": false
+      },
+      {
+        "id": "opt-4",
+        "ingredients": [
+          { "name": "Chicken", "quantity": "1.5kg" },
+          { "name": "Rice", "quantity": "500g" },
+          { "name": "Ginger", "quantity": "50g" }
+        ],
+        "correct": false
+      }
+    ]
+  },
+  {
+    "id": "challenge-3",
+    "dish": "Curry Mee",
+    "description": "I cook curry mee, I need:",
+    "requiredIngredients": [
+      { "name": "Curry Paste", "quantity": "200g", "unit": "g" },
+      { "name": "Coconut Milk", "quantity": "400ml", "unit": "ml" },
+      { "name": "Noodles", "quantity": "500g", "unit": "g" }
+    ],
+    "options": [
+      {
+        "id": "opt-1",
+        "ingredients": [
+          { "name": "Curry Paste", "quantity": "200g" },
+          { "name": "Coconut Milk", "quantity": "400ml" },
+          { "name": "Noodles", "quantity": "500g" }
+        ],
+        "correct": true
+      },
+      {
+        "id": "opt-2",
+        "ingredients": [
+          { "name": "Curry Paste", "quantity": "150g" },
+          { "name": "Coconut Milk", "quantity": "400ml" },
+          { "name": "Noodles", "quantity": "500g" }
+        ],
+        "correct": false
+      },
+      {
+        "id": "opt-3",
+        "ingredients": [
+          { "name": "Curry Paste", "quantity": "200g" },
+          { "name": "Coconut Milk", "quantity": "300ml" },
+          { "name": "Noodles", "quantity": "500g" }
+        ],
+        "correct": false
+      },
+      {
+        "id": "opt-4",
+        "ingredients": [
+          { "name": "Curry Paste", "quantity": "250g" },
+          { "name": "Coconut Milk", "quantity": "400ml" },
+          { "name": "Noodles", "quantity": "500g" }
+        ],
+        "correct": false
+      }
+    ]
+  }
+]
+

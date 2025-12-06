@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Trophy, Star, Gift, TrendingUp, CheckCircle2, XCircle } from 'lucide-react'
 import groceryData from '@/data/grocery-game.json'
+import GroceryItemDisplay from '@/components/three/GroceryItemDisplay'
 
 interface GroceryItem {
   id: string
@@ -329,13 +330,10 @@ export default function GroceryGame() {
           <CardContent className="pt-6 space-y-6">
             {/* Item Display */}
             <div className="text-center space-y-4">
-              <div className="w-48 h-48 mx-auto rounded-2xl overflow-hidden shadow-lg ring-4 ring-primary/10">
-                <img
-                  src={gameState.currentItem.image}
-                  alt={gameState.currentItem.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
+              <GroceryItemDisplay
+                imageUrl={gameState.currentItem.image}
+                itemName={gameState.currentItem.name}
+              />
               <h2 className="text-2xl font-bold text-neutral-800">
                 {gameState.currentItem.name}
               </h2>

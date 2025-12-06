@@ -2,61 +2,71 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { CheckCircle2, XCircle, Receipt, Trophy, RotateCcw } from 'lucide-react'
-import receiptsData from '@/data/receipts.json'
+import { CheckCircle2, XCircle, ChefHat, Trophy, RotateCcw } from 'lucide-react'
+import cookingChallengesData from '@/data/cooking-challenges.json'
 
-interface ReceiptItem {
+interface Ingredient {
   name: string
-  price: number
-  qty: number
+  quantity: string
+  unit?: string
 }
 
-interface Receipt {
+interface Option {
   id: string
-  store: string
-  date: string
-  time: string
-  total: number
-  items: ReceiptItem[]
+  ingredients: Ingredient[]
   correct: boolean
 }
 
+interface CookingChallenge {
+  id: string
+  dish: string
+  description: string
+  requiredIngredients: Ingredient[]
+  options: Option[]
+}
+
 export default function ReceiptVerification() {
-  const [receipts, setReceipts] = useState<Receipt[]>([])
-  const [selectedReceipt, setSelectedReceipt] = useState<string | null>(null)
+  const [currentChallenge, setCurrentChallenge] = useState<CookingChallenge | null>(null)
+  const [selectedOption, setSelectedOption] = useState<string | null>(null)
   const [showResult, setShowResult] = useState(false)
   const [score, setScore] = useState({ correct: 0, total: 0 })
-  const [gameComplete, setGameComplete] = useState(false)
+  const [level, setLevel] = useState(1)
 
-  // Load receipts on mount
+  // Load challenge on mount
   useEffect(() => {
-    loadNewRound()
+    loadNewChallenge()
   }, [])
 
-  const loadNewRound = () => {
-    // Shuffle receipts and take 4
-    const shuffled = [...receiptsData].sort(() => Math.random() - 0.5)
-    setReceipts(shuffled.slice(0, 4) as Receipt[])
-    setSelectedReceipt(null)
+  const loadNewChallenge = () => {
+    // Get random challenge
+    const randomIndex = Math.floor(Math.random() * cookingChallengesData.length)
+    const challenge = cookingChallengesData[randomIndex] as CookingChallenge
+    setCurrentChallenge(challenge)
+    setSelectedOption(null)
     setShowResult(false)
-    setGameComplete(false)
   }
 
-  const handleSelectReceipt = (receiptId: string) => {
+  const handleSelectOption = (optionId: string) => {
     if (showResult) return
 
-    setSelectedReceipt(receiptId)
-    const receipt = receipts.find((r) => r.id === receiptId)
+    setSelectedOption(optionId)
+    const option = currentChallenge?.options.find((opt) => opt.id === optionId)
     
-    if (receipt) {
+    if (option) {
       setShowResult(true)
-      setGameComplete(true)
       
-      if (receipt.correct) {
+      if (option.correct) {
         setScore((prev) => ({
           correct: prev.correct + 1,
           total: prev.total + 1,
         }))
+        // Move to next level if correct
+        if (level < 30) {
+          setTimeout(() => {
+            setLevel(level + 1)
+            loadNewChallenge()
+          }, 2000)
+        }
       } else {
         setScore((prev) => ({
           ...prev,
@@ -66,13 +76,13 @@ export default function ReceiptVerification() {
     }
   }
 
-  const getCorrectReceipt = () => {
-    return receipts.find((r) => r.correct)
+  const getCorrectOption = () => {
+    return currentChallenge?.options.find((opt) => opt.correct)
   }
 
-  const isCorrect = (receiptId: string) => {
-    const receipt = receipts.find((r) => r.id === receiptId)
-    return receipt?.correct || false
+  const isCorrect = (optionId: string) => {
+    const option = currentChallenge?.options.find((opt) => opt.id === optionId)
+    return option?.correct || false
   }
 
   return (
@@ -81,15 +91,20 @@ export default function ReceiptVerification() {
       <div className="space-y-2">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-gradient-to-br from-primary to-green-600 rounded-xl shadow-lg">
-            <Receipt className="h-8 w-8 text-white" />
+            <ChefHat className="h-8 w-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-green-600 bg-clip-text text-transparent">
-            Receipt Verification
+            Cooking Ingredient Challenge
           </h1>
         </div>
-        <p className="text-neutral-700 font-medium">
-          Click on the correct receipt that matches the items shown
-        </p>
+        <div className="flex items-center justify-between">
+          <p className="text-neutral-700 font-medium">
+            Select the correct ingredients and quantities needed for the recipe
+          </p>
+          <Badge className="bg-primary text-white px-3 py-1">
+            Level {level}/30
+          </Badge>
+        </div>
       </div>
 
       {/* Score Card */}
@@ -108,180 +123,179 @@ export default function ReceiptVerification() {
               </div>
             </div>
             <Button
-              onClick={loadNewRound}
+              onClick={loadNewChallenge}
               variant="outline"
               className="flex items-center gap-2"
             >
               <RotateCcw className="h-4 w-4" />
-              New Round
+              New Challenge
             </Button>
           </div>
         </CardContent>
       </Card>
 
       {/* Question/Challenge Card */}
-      {receipts.length > 0 && getCorrectReceipt() && (
+      {currentChallenge && (
         <Card className="border-2 border-primary/20 shadow-lg bg-gradient-to-br from-white to-blue-50/30">
           <CardHeader className="bg-gradient-to-r from-primary/5 to-blue-50/50 rounded-t-lg">
             <CardTitle className="text-primary font-bold flex items-center gap-2">
-              <Receipt className="h-5 w-5" />
-              Which receipt matches these items?
+              <ChefHat className="h-5 w-5" />
+              {currentChallenge.dish}
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-6">
+            <p className="text-lg font-semibold text-neutral-800 mb-4">
+              {currentChallenge.description}
+            </p>
             <div className="space-y-3">
-              {getCorrectReceipt()!.items.map((item, idx) => (
+              {currentChallenge.requiredIngredients.map((ingredient, idx) => (
                 <div
                   key={idx}
                   className="flex items-center justify-between p-3 bg-white rounded-lg border border-primary/10 shadow-sm"
                 >
-                  <span className="font-medium text-neutral-800">{item.name}</span>
-                  <div className="flex items-center gap-4">
-                    <span className="text-sm text-neutral-600">Qty: {item.qty}</span>
-                    <span className="font-bold text-primary">RM{item.price.toFixed(2)}</span>
-                  </div>
-                </div>
-              ))}
-              <div className="pt-3 border-t-2 border-primary/20 mt-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-lg font-bold text-neutral-800">Total:</span>
-                  <span className="text-2xl font-bold text-primary">
-                    RM{getCorrectReceipt()!.total.toFixed(2)}
+                  <span className="font-medium text-neutral-800">{ingredient.name}</span>
+                  <span className="font-bold text-primary text-lg">
+                    {ingredient.quantity}
                   </span>
                 </div>
-              </div>
+              ))}
             </div>
           </CardContent>
         </Card>
       )}
 
-      {/* Receipt Options Grid */}
-      <div className="space-y-4">
-        <h2 className="text-xl font-bold text-neutral-800">Select the Correct Receipt:</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {receipts.map((receipt) => {
-            const isSelected = selectedReceipt === receipt.id
-            const isCorrectReceipt = receipt.correct
-            const showFeedback = showResult && isSelected
+      {/* Ingredient Options Grid */}
+      {currentChallenge && (
+        <div className="space-y-4">
+          <h2 className="text-xl font-bold text-neutral-800">Select the Correct Ingredients:</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {currentChallenge.options.map((option) => {
+              const isSelected = selectedOption === option.id
+              const isCorrectOption = option.correct
+              const showFeedback = showResult && isSelected
 
-            return (
-              <Card
-                key={receipt.id}
-                onClick={() => handleSelectReceipt(receipt.id)}
-                className={`
-                  cursor-pointer transition-all duration-300 overflow-hidden
-                  ${isSelected && showResult
-                    ? isCorrectReceipt
-                      ? 'border-4 border-green-500 bg-green-50 shadow-xl scale-105'
-                      : 'border-4 border-red-500 bg-red-50 shadow-xl scale-105'
-                    : 'border-2 border-primary/20 hover:border-primary/40 hover:shadow-lg'
-                  }
-                  ${!showResult && 'hover:scale-102'}
-                  bg-gradient-to-br from-white to-green-50/20
-                `}
-              >
-                <CardHeader className="pb-3 bg-gradient-to-r from-primary/5 to-green-50/30">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle className="text-lg font-bold text-neutral-800">
-                        {receipt.store}
-                      </CardTitle>
-                      <p className="text-xs text-neutral-600 mt-1">
-                        {receipt.date} • {receipt.time}
-                      </p>
-                    </div>
-                    {showFeedback && (
-                      <div className="flex-shrink-0">
-                        {isCorrectReceipt ? (
-                          <CheckCircle2 className="h-8 w-8 text-green-600" />
-                        ) : (
-                          <XCircle className="h-8 w-8 text-red-600" />
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-4 space-y-3">
-                  <div className="space-y-2">
-                    {receipt.items.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-center justify-between text-sm py-1.5 px-2 bg-white/50 rounded"
-                      >
-                        <span className="text-neutral-700">{item.name}</span>
-                        <div className="flex items-center gap-3">
-                          <span className="text-xs text-neutral-500">x{item.qty}</span>
-                          <span className="font-semibold text-neutral-800">
-                            RM{item.price.toFixed(2)}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="pt-3 border-t-2 border-primary/10">
+              return (
+                <Card
+                  key={option.id}
+                  onClick={() => handleSelectOption(option.id)}
+                  className={`
+                    cursor-pointer transition-all duration-300 overflow-hidden
+                    ${isSelected && showResult
+                      ? isCorrectOption
+                        ? 'border-4 border-green-500 bg-green-50 shadow-xl scale-105'
+                        : 'border-4 border-red-500 bg-red-50 shadow-xl scale-105'
+                      : 'border-2 border-primary/20 hover:border-primary/40 hover:shadow-lg'
+                    }
+                    ${!showResult && 'hover:scale-102'}
+                    bg-gradient-to-br from-white to-green-50/20
+                  `}
+                >
+                  <CardHeader className="pb-3 bg-gradient-to-r from-primary/5 to-green-50/30">
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-neutral-800">Total:</span>
-                      <span className="text-xl font-bold text-primary">
-                        RM{receipt.total.toFixed(2)}
-                      </span>
-                    </div>
-                  </div>
-                  {showFeedback && (
-                    <div className="pt-3 mt-3 border-t-2 border-primary/10">
-                      {isCorrectReceipt ? (
-                        <div className="flex items-center justify-center gap-2 p-2 bg-green-100 rounded-lg">
-                          <Trophy className="h-5 w-5 text-green-600" />
-                          <span className="font-bold text-green-700">Correct! Well done!</span>
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-center gap-2 p-2 bg-red-100 rounded-lg">
-                          <XCircle className="h-5 w-5 text-red-600" />
-                          <span className="font-bold text-red-700">Incorrect. Try again!</span>
+                      <CardTitle className="text-lg font-bold text-neutral-800">
+                        Option {option.id.split('-')[1]}
+                      </CardTitle>
+                      {showFeedback && (
+                        <div className="flex-shrink-0">
+                          {isCorrectOption ? (
+                            <CheckCircle2 className="h-8 w-8 text-green-600" />
+                          ) : (
+                            <XCircle className="h-8 w-8 text-red-600" />
+                          )}
                         </div>
                       )}
                     </div>
-                  )}
-                </CardContent>
-              </Card>
-            )
-          })}
+                  </CardHeader>
+                  <CardContent className="pt-4 space-y-3">
+                    <div className="space-y-2">
+                      {option.ingredients.map((ingredient, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-center justify-between text-sm py-1.5 px-2 bg-white/50 rounded"
+                        >
+                          <span className="text-neutral-700">{ingredient.name}</span>
+                          <span className="font-semibold text-neutral-800">
+                            {ingredient.quantity}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    {showFeedback && (
+                      <div className="pt-3 mt-3 border-t-2 border-primary/10">
+                        {isCorrectOption ? (
+                          <div className="flex items-center justify-center gap-2 p-2 bg-green-100 rounded-lg">
+                            <Trophy className="h-5 w-5 text-green-600" />
+                            <span className="font-bold text-green-700">Correct! Well done!</span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-center gap-2 p-2 bg-red-100 rounded-lg">
+                            <XCircle className="h-5 w-5 text-red-600" />
+                            <span className="font-bold text-red-700">Incorrect. Try again!</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )
+            })}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Show Correct Receipt if Wrong Selection */}
-      {showResult && selectedReceipt && !isCorrect(selectedReceipt) && getCorrectReceipt() && (
+      {/* Show Correct Option if Wrong Selection */}
+      {showResult && selectedOption && !isCorrect(selectedOption) && getCorrectOption() && (
         <Card className="border-4 border-green-500 bg-green-50 shadow-xl">
           <CardHeader className="bg-gradient-to-r from-green-500/10 to-green-100/50">
             <CardTitle className="text-green-700 font-bold flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5" />
-              The Correct Receipt:
+              The Correct Ingredients:
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-4">
             <div className="space-y-2">
-              {getCorrectReceipt()!.items.map((item, idx) => (
+              {getCorrectOption()!.ingredients.map((ingredient, idx) => (
                 <div
                   key={idx}
                   className="flex items-center justify-between text-sm py-1.5 px-2 bg-white rounded"
                 >
-                  <span className="text-neutral-700">{item.name}</span>
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs text-neutral-500">x{item.qty}</span>
-                    <span className="font-semibold text-neutral-800">
-                      RM{item.price.toFixed(2)}
-                    </span>
-                  </div>
-                </div>
-              ))}
-              <div className="pt-3 border-t-2 border-green-200 mt-3">
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-neutral-800">Total:</span>
-                  <span className="text-xl font-bold text-green-600">
-                    RM{getCorrectReceipt()!.total.toFixed(2)}
+                  <span className="text-neutral-700">{ingredient.name}</span>
+                  <span className="font-semibold text-neutral-800">
+                    {ingredient.quantity}
                   </span>
                 </div>
-              </div>
+              ))}
             </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Next Challenge Button */}
+      {showResult && selectedOption && isCorrect(selectedOption) && level < 30 && (
+        <div className="text-center">
+          <p className="text-sm text-neutral-600 mb-2">Moving to next level...</p>
+        </div>
+      )}
+
+      {/* Game Complete */}
+      {level >= 30 && (
+        <Card className="border-4 border-primary bg-gradient-to-br from-primary/10 to-green-50 shadow-xl">
+          <CardContent className="p-8 text-center">
+            <Trophy className="h-16 w-16 text-primary mx-auto mb-4" />
+            <h2 className="text-3xl font-bold text-primary mb-2">Congratulations!</h2>
+            <p className="text-lg text-neutral-700 mb-4">
+              You've completed all 30 levels!
+            </p>
+            <Button
+              onClick={() => {
+                setLevel(1)
+                setScore({ correct: 0, total: 0 })
+                loadNewChallenge()
+              }}
+              className="bg-gradient-to-r from-primary to-green-600 hover:from-primary/90 hover:to-green-600/90"
+            >
+              Play Again
+            </Button>
           </CardContent>
         </Card>
       )}
