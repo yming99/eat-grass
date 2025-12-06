@@ -1,0 +1,10 @@
+{
+  "name": "Gary",
+  "email": "gary@example.com",
+  "avatar": "/img/avatars/gary.png",
+  "diet": "normal",
+  "budget": 20,
+  "preferred_stores": ["Lotus", "AEON"],
+  "member_since": "2024"
+}
+

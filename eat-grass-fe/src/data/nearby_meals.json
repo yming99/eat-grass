@@ -1,0 +1,87 @@
+{
+  "location": "Sunway Pyramid",
+  "stalls": [
+    {
+      "stall_id": 1,
+      "name": "LG2 Food Court – Nasi Lemak Corner",
+      "location_detail": "LG2 Blue Atrium",
+      "distance_m": 120,
+      "operating_hours": "10am – 10pm",
+      "popular_meals": ["Nasi Lemak", "Fried Chicken Rice", "Curry Mee"],
+      "meals": [
+        {
+          "meal_id": 101,
+          "name": "Nasi Lemak Ayam Goreng",
+          "price": 8.5,
+          "calories": 620,
+          "image": "https://images.unsplash.com/photo-1603133872878-684f208fb84b",
+          "ingredients": ["Rice", "Fried Chicken", "Sambal", "Egg"]
+        },
+        {
+          "meal_id": 102,
+          "name": "Nasi Lemak Telur",
+          "price": 6.0,
+          "calories": 540,
+          "image": "https://images.unsplash.com/photo-1603133872878-684f208fb84b",
+          "ingredients": ["Rice", "Boiled Egg", "Sambal"]
+        }
+      ]
+    },
+    {
+      "stall_id": 2,
+      "name": "Uncle Bob Express",
+      "location_detail": "LG2 Blue Atrium",
+      "distance_m": 90,
+      "operating_hours": "10am – 10pm",
+      "popular_meals": ["Nasi Lemak", "Fried Chicken Rice", "Curry Mee"],
+      "meals": [
+        {
+          "meal_id": 201,
+          "name": "Fried Chicken Rice",
+          "price": 10,
+          "calories": 700,
+          "image": "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec",
+          "ingredients": ["Rice", "Fried Chicken", "Soy Sauce"]
+        }
+      ]
+    },
+    {
+      "stall_id": 3,
+      "name": "Ah Cheng Laksa",
+      "location_detail": "LG1 Food Court",
+      "distance_m": 150,
+      "operating_hours": "11am – 9pm",
+      "popular_meals": ["Asam Laksa", "Curry Laksa", "Penang Laksa"],
+      "meals": [
+        {
+          "meal_id": 301,
+          "name": "Asam Laksa",
+          "price": 12.5,
+          "calories": 500,
+          "image": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1",
+          "ingredients": ["Noodles", "Fish Broth", "Vegetables"]
+        }
+      ]
+    },
+    {
+      "stall_id": 4,
+      "name": "Sushi Bento Express",
+      "location_detail": "LG2 Food Court",
+      "distance_m": 180,
+      "operating_hours": "10am – 10pm",
+      "popular_meals": ["Chicken Teriyaki Bento", "Salmon Bento", "Beef Bento"],
+      "meals": [
+        {
+          "meal_id": 401,
+          "name": "Chicken Teriyaki Bento",
+          "price": 16,
+          "calories": 820,
+          "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c",
+          "ingredients": ["Chicken", "Rice", "Teriyaki Sauce", "Veggies"]
+        }
+      ]
+    }
+  ]
+}
+
+

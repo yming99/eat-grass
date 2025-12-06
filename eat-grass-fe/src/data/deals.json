@@ -1,0 +1,30 @@
+[
+  {
+    "id": "deal-1",
+    "title": "Fresh Produce Bundle",
+    "description": "Get 20% off on all fresh vegetables and fruits",
+    "discount": 20,
+    "validUntil": "2024-02-01",
+    "image": "https://images.unsplash.com/photo-1542838132-92c53300491e",
+    "category": "produce"
+  },
+  {
+    "id": "deal-2",
+    "title": "Protein Power Pack",
+    "description": "Buy 2 get 1 free on all protein items",
+    "discount": 33,
+    "validUntil": "2024-01-25",
+    "image": "https://images.unsplash.com/photo-1603048297172-c92544744319",
+    "category": "protein"
+  },
+  {
+    "id": "deal-3",
+    "title": "Organic Special",
+    "description": "15% off on all organic products",
+    "discount": 15,
+    "validUntil": "2024-01-30",
+    "image": "https://images.unsplash.com/photo-1466637574441-749b8f19452f",
+    "category": "organic"
+  }
+]
+

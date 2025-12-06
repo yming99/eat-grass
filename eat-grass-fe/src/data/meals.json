@@ -1,0 +1,134 @@
+[
+  {
+    "id": "meal-1",
+    "name": "Tomato Egg Stir Fry",
+    "description": "Classic Chinese-style tomato and egg dish",
+    "image": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c",
+    "calories": 320,
+    "protein": 18,
+    "carbs": 25,
+    "fat": 15,
+    "prepTime": 10,
+    "cookTime": 15,
+    "servings": 2,
+    "ingredients": [
+      { "name": "tomato", "quantity": 0.5, "unit": "kg" },
+      { "name": "egg", "quantity": 0.5, "unit": "dozen" },
+      { "name": "onion", "quantity": 0.2, "unit": "kg" },
+      { "name": "cooking oil", "quantity": 0.1, "unit": "bottle" },
+      { "name": "salt", "quantity": 0.1, "unit": "pack" }
+    ],
+    "tags": ["quick", "budget-friendly", "chinese"]
+  },
+  {
+    "id": "meal-2",
+    "name": "Chicken Rice",
+    "description": "Simple and delicious chicken with rice",
+    "image": "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec",
+    "calories": 580,
+    "protein": 35,
+    "carbs": 65,
+    "fat": 12,
+    "prepTime": 15,
+    "cookTime": 30,
+    "servings": 2,
+    "ingredients": [
+      { "name": "chicken", "quantity": 0.5, "unit": "kg" },
+      { "name": "rice", "quantity": 0.3, "unit": "kg" },
+      { "name": "garlic", "quantity": 1, "unit": "bulb" },
+      { "name": "cooking oil", "quantity": 0.1, "unit": "bottle" },
+      { "name": "salt", "quantity": 0.1, "unit": "pack" }
+    ],
+    "tags": ["high-protein", "filling", "malaysian"]
+  },
+  {
+    "id": "meal-3",
+    "name": "Tomato Chicken Curry",
+    "description": "Rich and flavorful tomato-based chicken curry",
+    "image": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1",
+    "calories": 450,
+    "protein": 28,
+    "carbs": 35,
+    "fat": 20,
+    "prepTime": 20,
+    "cookTime": 40,
+    "servings": 2,
+    "ingredients": [
+      { "name": "chicken", "quantity": 0.5, "unit": "kg" },
+      { "name": "tomato", "quantity": 0.4, "unit": "kg" },
+      { "name": "onion", "quantity": 0.3, "unit": "kg" },
+      { "name": "garlic", "quantity": 1, "unit": "bulb" },
+      { "name": "chili", "quantity": 0.5, "unit": "pack" },
+      { "name": "cooking oil", "quantity": 0.1, "unit": "bottle" },
+      { "name": "salt", "quantity": 0.1, "unit": "pack" }
+    ],
+    "tags": ["spicy", "curry", "indian"]
+  },
+  {
+    "id": "meal-4",
+    "name": "Fried Rice with Egg",
+    "description": "Simple fried rice with scrambled eggs",
+    "image": "https://images.unsplash.com/photo-1603133872878-684f208fb84b",
+    "calories": 420,
+    "protein": 15,
+    "carbs": 55,
+    "fat": 14,
+    "prepTime": 10,
+    "cookTime": 15,
+    "servings": 2,
+    "ingredients": [
+      { "name": "rice", "quantity": 0.3, "unit": "kg" },
+      { "name": "egg", "quantity": 0.5, "unit": "dozen" },
+      { "name": "onion", "quantity": 0.2, "unit": "kg" },
+      { "name": "cooking oil", "quantity": 0.1, "unit": "bottle" },
+      { "name": "soy sauce", "quantity": 0.2, "unit": "bottle" },
+      { "name": "salt", "quantity": 0.1, "unit": "pack" }
+    ],
+    "tags": ["quick", "budget-friendly", "chinese"]
+  },
+  {
+    "id": "meal-5",
+    "name": "Chickpea Salad",
+    "description": "Fresh and healthy chickpea salad with vegetables",
+    "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd",
+    "calories": 280,
+    "protein": 12,
+    "carbs": 40,
+    "fat": 8,
+    "prepTime": 15,
+    "cookTime": 0,
+    "servings": 2,
+    "ingredients": [
+      { "name": "chickpeas", "quantity": 1, "unit": "can" },
+      { "name": "tomato", "quantity": 0.3, "unit": "kg" },
+      { "name": "cucumber", "quantity": 0.3, "unit": "kg" },
+      { "name": "onion", "quantity": 0.2, "unit": "kg" },
+      { "name": "cooking oil", "quantity": 0.05, "unit": "bottle" },
+      { "name": "salt", "quantity": 0.1, "unit": "pack" }
+    ],
+    "tags": ["vegetarian", "healthy", "no-cook"]
+  },
+  {
+    "id": "meal-6",
+    "name": "Potato Curry",
+    "description": "Simple and hearty potato curry",
+    "image": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1",
+    "calories": 350,
+    "protein": 6,
+    "carbs": 55,
+    "fat": 12,
+    "prepTime": 15,
+    "cookTime": 30,
+    "servings": 2,
+    "ingredients": [
+      { "name": "potato", "quantity": 0.5, "unit": "kg" },
+      { "name": "tomato", "quantity": 0.3, "unit": "kg" },
+      { "name": "onion", "quantity": 0.3, "unit": "kg" },
+      { "name": "garlic", "quantity": 1, "unit": "bulb" },
+      { "name": "chili", "quantity": 0.3, "unit": "pack" },
+      { "name": "cooking oil", "quantity": 0.1, "unit": "bottle" },
+      { "name": "salt", "quantity": 0.1, "unit": "pack" }
+    ],
+    "tags": ["vegetarian", "curry", "budget-friendly"]
+  }
+]

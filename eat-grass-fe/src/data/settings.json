@@ -1,0 +1,17 @@
+{
+  "notifications": {
+    "mealReminders": true,
+    "dealAlerts": true,
+    "socialUpdates": false
+  },
+  "preferences": {
+    "theme": "light",
+    "language": "en",
+    "units": "imperial"
+  },
+  "privacy": {
+    "profileVisibility": "public",
+    "shareMealPlans": true
+  }
+}
+

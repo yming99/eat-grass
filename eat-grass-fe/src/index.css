@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #FFFDF6;
+}
+
+@layer components {
+  .card-global {
+    @apply rounded-xl shadow-[0_4px_12px_rgba(0,0,0,0.06)] bg-offwhite2 p-4 md:p-6;
+  }
+  
+  .card-title {
+    @apply text-lg font-semibold;
+  }
+  
+  .card-subtitle {
+    @apply text-sm text-neutral-600;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@layer utilities {
+  .animate-shine {
+    animation: shine 2s infinite;
+  }
+}

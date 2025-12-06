@@ -1,0 +1,33 @@
+{
+  "id": "plan-1",
+  "name": "Weekly Meal Plan",
+  "startDate": "2024-01-15",
+  "endDate": "2024-01-21",
+  "meals": [
+    {
+      "day": "Monday",
+      "date": "2024-01-15",
+      "breakfast": "meal-1",
+      "lunch": "meal-2",
+      "dinner": "meal-3",
+      "snacks": []
+    },
+    {
+      "day": "Tuesday",
+      "date": "2024-01-16",
+      "breakfast": "meal-2",
+      "lunch": "meal-3",
+      "dinner": "meal-1",
+      "snacks": []
+    },
+    {
+      "day": "Wednesday",
+      "date": "2024-01-17",
+      "breakfast": "meal-3",
+      "lunch": "meal-1",
+      "dinner": "meal-2",
+      "snacks": []
+    }
+  ]
+}
+

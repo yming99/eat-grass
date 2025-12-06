@@ -1,0 +1,197 @@
+[
+  {
+    "id": "ing-1",
+    "name": "Tomato",
+    "category": "vegetable",
+    "unit": "kg",
+    "price": 4.50,
+    "nutrition": {
+      "calories": 18,
+      "protein": 1,
+      "fat": 0,
+      "carbs": 4
+    }
+  },
+  {
+    "id": "ing-2",
+    "name": "Chicken",
+    "category": "protein",
+    "unit": "kg",
+    "price": 12.00,
+    "nutrition": {
+      "calories": 165,
+      "protein": 31,
+      "fat": 3.6,
+      "carbs": 0
+    }
+  },
+  {
+    "id": "ing-3",
+    "name": "Rice",
+    "category": "grain",
+    "unit": "kg",
+    "price": 6.50,
+    "nutrition": {
+      "calories": 130,
+      "protein": 2.7,
+      "fat": 0.3,
+      "carbs": 28
+    }
+  },
+  {
+    "id": "ing-4",
+    "name": "Onion",
+    "category": "vegetable",
+    "unit": "kg",
+    "price": 3.00,
+    "nutrition": {
+      "calories": 40,
+      "protein": 1.1,
+      "fat": 0.1,
+      "carbs": 9
+    }
+  },
+  {
+    "id": "ing-5",
+    "name": "Garlic",
+    "category": "vegetable",
+    "unit": "bulb",
+    "price": 2.00,
+    "nutrition": {
+      "calories": 149,
+      "protein": 6.4,
+      "fat": 0.5,
+      "carbs": 33
+    }
+  },
+  {
+    "id": "ing-6",
+    "name": "Egg",
+    "category": "protein",
+    "unit": "dozen",
+    "price": 5.50,
+    "nutrition": {
+      "calories": 155,
+      "protein": 13,
+      "fat": 11,
+      "carbs": 1.1
+    }
+  },
+  {
+    "id": "ing-7",
+    "name": "Cooking Oil",
+    "category": "pantry",
+    "unit": "bottle",
+    "price": 8.00,
+    "nutrition": {
+      "calories": 884,
+      "protein": 0,
+      "fat": 100,
+      "carbs": 0
+    }
+  },
+  {
+    "id": "ing-8",
+    "name": "Salt",
+    "category": "pantry",
+    "unit": "pack",
+    "price": 1.50,
+    "nutrition": {
+      "calories": 0,
+      "protein": 0,
+      "fat": 0,
+      "carbs": 0
+    }
+  },
+  {
+    "id": "ing-9",
+    "name": "Chili",
+    "category": "vegetable",
+    "unit": "pack",
+    "price": 2.50,
+    "nutrition": {
+      "calories": 40,
+      "protein": 2,
+      "fat": 0.4,
+      "carbs": 9
+    }
+  },
+  {
+    "id": "ing-10",
+    "name": "Cucumber",
+    "category": "vegetable",
+    "unit": "kg",
+    "price": 3.50,
+    "nutrition": {
+      "calories": 16,
+      "protein": 0.7,
+      "fat": 0.1,
+      "carbs": 4
+    }
+  },
+  {
+    "id": "ing-11",
+    "name": "Chickpeas",
+    "category": "legume",
+    "unit": "can",
+    "price": 3.50,
+    "nutrition": {
+      "calories": 269,
+      "protein": 15,
+      "fat": 4,
+      "carbs": 45
+    }
+  },
+  {
+    "id": "ing-12",
+    "name": "Potato",
+    "category": "vegetable",
+    "unit": "kg",
+    "price": 4.00,
+    "nutrition": {
+      "calories": 77,
+      "protein": 2,
+      "fat": 0.1,
+      "carbs": 17
+    }
+  },
+  {
+    "id": "ing-13",
+    "name": "Carrot",
+    "category": "vegetable",
+    "unit": "kg",
+    "price": 3.50,
+    "nutrition": {
+      "calories": 41,
+      "protein": 0.9,
+      "fat": 0.2,
+      "carbs": 10
+    }
+  },
+  {
+    "id": "ing-14",
+    "name": "Cabbage",
+    "category": "vegetable",
+    "unit": "head",
+    "price": 2.50,
+    "nutrition": {
+      "calories": 25,
+      "protein": 1.3,
+      "fat": 0.1,
+      "carbs": 6
+    }
+  },
+  {
+    "id": "ing-15",
+    "name": "Soy Sauce",
+    "category": "pantry",
+    "unit": "bottle",
+    "price": 4.00,
+    "nutrition": {
+      "calories": 53,
+      "protein": 8,
+      "fat": 0.1,
+      "carbs": 4.9
+    }
+  }
+]

@@ -1,0 +1,27 @@
+[
+  {
+    "id": "saved-plan-1",
+    "name": "Summer Meal Plan",
+    "createdAt": "2024-01-10",
+    "meals": ["meal-1", "meal-2", "meal-3"],
+    "description": "Light and refreshing meals for summer",
+    "totalCost": 46.50
+  },
+  {
+    "id": "saved-plan-2",
+    "name": "High Protein Week",
+    "createdAt": "2024-01-05",
+    "meals": ["meal-1", "meal-3"],
+    "description": "Focus on high protein meals for muscle building",
+    "totalCost": 31.00
+  },
+  {
+    "id": "saved-plan-3",
+    "name": "Vegetarian Delights",
+    "createdAt": "2024-01-01",
+    "meals": ["meal-2", "meal-3"],
+    "description": "Plant-based meal options",
+    "totalCost": 30.50
+  }
+]
+
