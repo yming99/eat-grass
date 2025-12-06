@@ -11,46 +11,79 @@ import {
 } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
 import MealCard from '@/components/MealCard'
-import { Download, Utensils, Apple, Fish, Carrot, Loader2, TrendingDown, Users, Calendar, DollarSign } from 'lucide-react'
-import mealsData from '@/data/meals.json'
-import ingredientsData from '@/data/ingredients.json'
+import { 
+  Download, 
+  Utensils, 
+  Apple, 
+  Fish, 
+  Carrot, 
+  Loader2, 
+  TrendingDown, 
+  Users, 
+  Calendar, 
+  DollarSign,
+  MapPin,
+  ChefHat,
+  Store,
+  Lightbulb,
+  ShoppingCart,
+  AlertCircle,
+  ChevronLeft,
+  ChevronRight
+} from 'lucide-react'
+import { generateMealPlan, type MealPlanResponse } from '@/services/api'
 
+/**
+ * Form data interface for meal plan generation
+ */
 interface FormData {
   budget: string
   days: string
   people: string
   diet: string
+  location: string // Optional location for restaurant scraping
 }
 
-interface GeneratedPlan {
-  totalCost: number
-  budget: number
-  days: number
-  people: number
-  daysData: Array<{
-    day: number
-    meals: any[]
-    dayCost: number
-  }>
-  summary: {
-    avgCostPerDay: number
-    avgCostPerPerson: number
-    avgCostPerMeal: number
-    totalMeals: number
-  }
-}
-
+/**
+ * Planner Page Component
+ * 
+ * Allows users to generate personalized meal plans based on:
+ * - Budget constraints
+ * - Number of days
+ * - Number of people
+ * - Dietary preferences
+ * - Location (for restaurant options via Just Eat scraping)
+ * 
+ * Uses Claude LLM backend for intelligent meal planning.
+ */
 export default function Planner() {
+  // Form state
   const [formData, setFormData] = useState<FormData>({
     budget: '',
     days: '',
     people: '',
     diet: '',
+    location: '',
   })
+  
+  // Validation errors
   const [errors, setErrors] = useState<Partial<FormData>>({})
+  
+  // Loading state
   const [isGenerating, setIsGenerating] = useState(false)
-  const [generatedPlan, setGeneratedPlan] = useState<GeneratedPlan | null>(null)
+  
+  // API error state
+  const [apiError, setApiError] = useState<string | null>(null)
+  
+  // Generated meal plan
+  const [generatedPlan, setGeneratedPlan] = useState<MealPlanResponse | null>(null)
+  
+  // Current day index for carousel navigation
+  const [currentDayIndex, setCurrentDayIndex] = useState(0)
 
+  /**
+   * Validate form inputs before submission
+   */
   const validateForm = (): boolean => {
     const newErrors: Partial<FormData> = {}
     
@@ -71,6 +104,9 @@ export default function Planner() {
     return Object.keys(newErrors).length === 0
   }
 
+  /**
+   * Handle form submission - calls Claude LLM backend
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     
@@ -79,194 +115,108 @@ export default function Planner() {
     }
 
     setIsGenerating(true)
+    setApiError(null)
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500))
-
-    const budget = parseFloat(formData.budget)
-    const people = parseInt(formData.people)
-    const mealsNeeded = parseInt(formData.days) // Using days as meal count
-    const servingsNeeded = people * mealsNeeded
-
-    // Create ingredient lookup map (normalize names to lowercase)
-    const ingredientMap = new Map<string, typeof ingredientsData[0]>()
-    ingredientsData.forEach(ing => {
-      ingredientMap.set(ing.name.toLowerCase(), ing)
-    })
-
-    // Filter meals based on diet
-    let filteredMeals = [...mealsData]
-    if (formData.diet === 'vegetarian') {
-      filteredMeals = mealsData.filter(meal => meal.tags?.includes('vegetarian'))
-    } else if (formData.diet === 'high-protein') {
-      filteredMeals = mealsData.filter(meal => meal.protein && meal.protein >= 25)
-    }
-
-    // Calculate which meals can be made with the budget
-    const availableMeals: Array<{
-      meal: typeof mealsData[0]
-      totalCost: number
-      ingredientBreakdown: Array<{
-        name: string
-        quantity: number
-        unit: string
-        price: number
-        totalCost: number
-      }>
-      servings: number
-      costPerServing: number
-    }> = []
-
-    filteredMeals.forEach(meal => {
-      if (!meal.ingredients || !Array.isArray(meal.ingredients)) return
-
-      const ingredientBreakdown: Array<{
-        name: string
-        quantity: number
-        unit: string
-        price: number
-        totalCost: number
-      }> = []
-
-      let mealTotalCost = 0
-      let canMake = true
-
-      // Calculate ingredient costs for the number of servings needed
-      meal.ingredients.forEach((ing: any) => {
-        const ingName = ing.name.toLowerCase()
-        const ingredient = ingredientMap.get(ingName)
-        
-        if (!ingredient) {
-          canMake = false
-          return
-        }
-
-        // Calculate quantity needed (scale by servings)
-        const quantityNeeded = (ing.quantity / meal.servings) * servingsNeeded
-        const totalCost = ingredient.price * quantityNeeded
-
-        ingredientBreakdown.push({
-          name: ingredient.name,
-          quantity: parseFloat(quantityNeeded.toFixed(2)),
-          unit: ing.unit,
-          price: ingredient.price,
-          totalCost: parseFloat(totalCost.toFixed(2)),
-        })
-
-        mealTotalCost += totalCost
+    try {
+      // Call the backend API to generate meal plan using Claude LLM
+      const mealPlan = await generateMealPlan({
+        budget: parseFloat(formData.budget),
+        days: parseInt(formData.days),
+        people: parseInt(formData.people),
+        diet: formData.diet,
+        location: formData.location || undefined, // Optional location for restaurant scraping
       })
 
-      if (canMake && mealTotalCost <= budget) {
-        availableMeals.push({
-          meal,
-          totalCost: parseFloat(mealTotalCost.toFixed(2)),
-          ingredientBreakdown,
-          servings: servingsNeeded,
-          costPerServing: parseFloat((mealTotalCost / servingsNeeded).toFixed(2)),
-        })
-      }
-    })
-
-    // Sort by cost (cheapest first)
-    availableMeals.sort((a, b) => a.totalCost - b.totalCost)
-
-    // Select meals for the plan (up to mealsNeeded)
-    const selectedMeals = availableMeals.slice(0, mealsNeeded).map(item => ({
-      ...item.meal,
-      totalCost: item.totalCost,
-      ingredientBreakdown: item.ingredientBreakdown,
-      costPerServing: item.costPerServing,
-      servings: item.servings,
-    }))
-
-    // Organize by days (distribute meals evenly across days)
-    const numDays = parseInt(formData.days)
-    const mealsPerDay = Math.ceil(selectedMeals.length / numDays)
-    const daysData = Array.from({ length: numDays }, (_, i) => {
-      const startIdx = i * mealsPerDay
-      const endIdx = Math.min(startIdx + mealsPerDay, selectedMeals.length)
-      const dayMeals = selectedMeals.slice(startIdx, endIdx)
-      const dayCost = dayMeals.reduce((sum, meal) => sum + (meal.totalCost || 0), 0)
-      return {
-        day: i + 1,
-        meals: dayMeals,
-        dayCost: parseFloat(dayCost.toFixed(2)),
-      }
-    })
-
-    const totalCost = selectedMeals.reduce((sum, meal) => sum + (meal.totalCost || 0), 0)
-    const totalMeals = selectedMeals.length
-
-    const plan: GeneratedPlan = {
-      totalCost: parseFloat(totalCost.toFixed(2)),
-      budget: parseFloat(formData.budget),
-      days: parseInt(formData.days),
-      people: parseInt(formData.people),
-      daysData,
-      summary: {
-        avgCostPerDay: parseFloat((totalCost / parseInt(formData.days)).toFixed(2)),
-        avgCostPerPerson: parseFloat((totalCost / parseInt(formData.people)).toFixed(2)),
-        avgCostPerMeal: parseFloat((totalCost / totalMeals).toFixed(2)),
-        totalMeals,
-      },
+      setGeneratedPlan(mealPlan)
+      setCurrentDayIndex(0) // Reset to first day when new plan is generated
+    } catch (error) {
+      console.error('Failed to generate meal plan:', error)
+      setApiError(
+        error instanceof Error 
+          ? error.message 
+          : 'Failed to generate meal plan. Please try again.'
+      )
+    } finally {
+      setIsGenerating(false)
     }
-
-    setGeneratedPlan(plan)
-    setIsGenerating(false)
   }
 
+  /**
+   * Export grocery list as text file
+   */
   const handleExport = () => {
     if (!generatedPlan) return
     
-    // Create detailed grocery list from ingredient breakdown
-    const ingredientMap = new Map<string, { quantity: number; unit: string; totalCost: number }>()
+    let groceryList = '🛒 GROCERY LIST\n'
+    groceryList += '='.repeat(40) + '\n\n'
     
-    generatedPlan.daysData.forEach(day => {
-      day.meals.forEach((meal: any) => {
-        if (meal.ingredientBreakdown) {
-          meal.ingredientBreakdown.forEach((ing: any) => {
-            const key = `${ing.name}-${ing.unit}`
-            if (ingredientMap.has(key)) {
-              const existing = ingredientMap.get(key)!
-              ingredientMap.set(key, {
-                quantity: existing.quantity + ing.quantity,
-                unit: ing.unit,
-                totalCost: existing.totalCost + ing.totalCost,
-              })
-            } else {
-              ingredientMap.set(key, {
-                quantity: ing.quantity,
-                unit: ing.unit,
-                totalCost: ing.totalCost,
-              })
-            }
-          })
-        }
+    // Add grocery items from the generated plan
+    if (generatedPlan.groceryList && generatedPlan.groceryList.length > 0) {
+      generatedPlan.groceryList.forEach(item => {
+        groceryList += `${item.name}: ${item.totalQuantity} ${item.unit} - RM ${item.estimatedCost.toFixed(2)}\n`
       })
-    })
+    } else {
+      // Fallback: extract ingredients from meals
+      const ingredientMap = new Map<string, { quantity: number; unit: string; totalCost: number }>()
+      
+      generatedPlan.daysData.forEach(day => {
+        day.meals.forEach((meal) => {
+          if (meal.ingredients) {
+            meal.ingredients.forEach((ing) => {
+              const key = `${ing.name}-${ing.unit}`
+              if (ingredientMap.has(key)) {
+                const existing = ingredientMap.get(key)!
+                ingredientMap.set(key, {
+                  quantity: existing.quantity + ing.quantity,
+                  unit: ing.unit,
+                  totalCost: existing.totalCost + ing.cost,
+                })
+              } else {
+                ingredientMap.set(key, {
+                  quantity: ing.quantity,
+                  unit: ing.unit,
+                  totalCost: ing.cost,
+                })
+              }
+            })
+          }
+        })
+      })
 
-    let groceryList = 'GROCERY LIST\n'
-    groceryList += '='.repeat(30) + '\n\n'
+      ingredientMap.forEach((value, key) => {
+        const [name] = key.split('-')
+        groceryList += `${name}: ${value.quantity.toFixed(2)} ${value.unit} - RM ${value.totalCost.toFixed(2)}\n`
+      })
+    }
     
-    ingredientMap.forEach((value, key) => {
-      const [name] = key.split('-')
-      groceryList += `${name}: ${value.quantity.toFixed(2)} ${value.unit} - RM ${value.totalCost.toFixed(2)}\n`
-    })
-    
-    groceryList += '\n' + '='.repeat(30) + '\n'
+    groceryList += '\n' + '='.repeat(40) + '\n'
+    groceryList += `📊 SUMMARY\n`
     groceryList += `Total Cost: RM ${generatedPlan.totalCost.toFixed(2)}\n`
     groceryList += `Budget: RM ${generatedPlan.budget.toFixed(2)}\n`
     groceryList += `Remaining: RM ${(generatedPlan.budget - generatedPlan.totalCost).toFixed(2)}\n`
+    groceryList += `\nDays: ${generatedPlan.days}\n`
+    groceryList += `People: ${generatedPlan.people}\n`
+    groceryList += `Total Meals: ${generatedPlan.summary.totalMeals}\n`
+    
+    // Add tips if available
+    if (generatedPlan.tips && generatedPlan.tips.length > 0) {
+      groceryList += '\n' + '='.repeat(40) + '\n'
+      groceryList += `💡 BUDGET TIPS\n\n`
+      generatedPlan.tips.forEach((tip, index) => {
+        groceryList += `${index + 1}. ${tip}\n`
+      })
+    }
 
     const blob = new Blob([groceryList], { type: 'text/plain' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `grocery-list-${new Date().toISOString().split('T')[0]}.txt`
+    a.download = `meal-plan-${new Date().toISOString().split('T')[0]}.txt`
     a.click()
     URL.revokeObjectURL(url)
   }
 
+  // Render generated plan view
   if (generatedPlan) {
     const budgetRemaining = generatedPlan.budget - generatedPlan.totalCost
     const isOverBudget = budgetRemaining < 0
@@ -279,7 +229,7 @@ export default function Planner() {
             <div className="space-y-4">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
-                  <h2 className="text-2xl font-bold mb-2">Your Meal Plan</h2>
+                  <h2 className="text-2xl font-bold mb-2">Your AI-Generated Meal Plan</h2>
                   <div className="flex items-baseline gap-2">
                     <span className="text-3xl font-bold text-primary">RM {generatedPlan.totalCost.toFixed(2)}</span>
                     <span className="text-sm text-neutral-600">total cost</span>
@@ -334,30 +284,182 @@ export default function Planner() {
                 <span>{generatedPlan.summary.totalMeals} meals</span>
                 <span>•</span>
                 <span>RM {generatedPlan.summary.avgCostPerMeal.toFixed(2)} per meal</span>
+                {generatedPlan.summary.homeCooked !== undefined && (
+                  <>
+                    <span>•</span>
+                    <span className="flex items-center gap-1">
+                      <ChefHat className="h-3 w-3" />
+                      {generatedPlan.summary.homeCooked} home-cooked
+                    </span>
+                  </>
+                )}
+                {generatedPlan.summary.restaurant !== undefined && generatedPlan.summary.restaurant > 0 && (
+                  <>
+                    <span>•</span>
+                    <span className="flex items-center gap-1">
+                      <Store className="h-3 w-3" />
+                      {generatedPlan.summary.restaurant} restaurant
+                    </span>
+                  </>
+                )}
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Days Layout - Two Column Desktop, Single Column Mobile */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {generatedPlan.daysData.map((day, index: number) => (
-            <Card key={index}>
+        {/* Budget Tips */}
+        {generatedPlan.tips && generatedPlan.tips.length > 0 && (
+          <Card className="bg-amber-50 border-amber-200">
+            <CardHeader className="pb-2">
+              <CardTitle className="flex items-center gap-2 text-amber-800">
+                <Lightbulb className="h-5 w-5" />
+                Budget Tips
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ul className="space-y-2">
+                {generatedPlan.tips.map((tip, index) => (
+                  <li key={index} className="flex items-start gap-2 text-sm text-amber-900">
+                    <span className="font-semibold">{index + 1}.</span>
+                    <span>{tip}</span>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Grocery List Summary */}
+        {generatedPlan.groceryList && generatedPlan.groceryList.length > 0 && (
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <ShoppingCart className="h-5 w-5" />
+                Grocery List Summary
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                {generatedPlan.groceryList.slice(0, 12).map((item, index) => (
+                  <div key={index} className="flex justify-between items-center p-2 bg-neutral-50 rounded-lg">
+                    <div>
+                      <p className="font-medium text-sm">{item.name}</p>
+                      <p className="text-xs text-neutral-600">{item.totalQuantity} {item.unit}</p>
+                    </div>
+                    <span className="text-sm font-semibold text-primary">
+                      RM {item.estimatedCost.toFixed(2)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              {generatedPlan.groceryList.length > 12 && (
+                <p className="text-sm text-neutral-600 mt-3 text-center">
+                  +{generatedPlan.groceryList.length - 12} more items in full grocery list
+                </p>
+              )}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Day Carousel with Navigation */}
+        <div className="space-y-4">
+          {/* Day Navigation Header */}
+          <div className="flex items-center justify-between">
+            {/* Previous Day Button */}
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setCurrentDayIndex(prev => Math.max(0, prev - 1))}
+              disabled={currentDayIndex === 0}
+              className="h-10 w-10"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </Button>
+
+            {/* Day Indicator */}
+            <div className="flex items-center gap-4">
+              <div className="flex gap-2">
+                {generatedPlan.daysData.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentDayIndex(index)}
+                    className={`w-2.5 h-2.5 rounded-full transition-all ${
+                      index === currentDayIndex 
+                        ? 'bg-primary w-6' 
+                        : 'bg-neutral-300 hover:bg-neutral-400'
+                    }`}
+                    aria-label={`Go to day ${index + 1}`}
+                  />
+                ))}
+              </div>
+              <span className="text-sm text-neutral-600 font-medium">
+                {currentDayIndex + 1} of {generatedPlan.daysData.length} days
+              </span>
+            </div>
+
+            {/* Next Day Button */}
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setCurrentDayIndex(prev => Math.min(generatedPlan.daysData.length - 1, prev + 1))}
+              disabled={currentDayIndex === generatedPlan.daysData.length - 1}
+              className="h-10 w-10"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </Button>
+          </div>
+
+          {/* Current Day Card */}
+          {generatedPlan.daysData[currentDayIndex] && (
+            <Card className="transition-all duration-300">
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <CardTitle>Day {day.day}</CardTitle>
-                  <span className="text-sm font-semibold text-primary">
-                    RM {day.dayCost.toFixed(2)}
+                  <CardTitle className="text-xl">
+                    {generatedPlan.daysData[currentDayIndex].dayName || `Day ${generatedPlan.daysData[currentDayIndex].day}`}
+                  </CardTitle>
+                  <span className="text-lg font-semibold text-primary">
+                    RM {generatedPlan.daysData[currentDayIndex].dayCost.toFixed(2)}
                   </span>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                {day.meals.map((meal: any, mealIndex: number) => (
-                  <MealCard key={`${meal.id}-${mealIndex}`} meal={meal} />
+                {generatedPlan.daysData[currentDayIndex].meals.map((meal, mealIndex: number) => (
+                  <MealCard 
+                    key={`${meal.id}-${mealIndex}`} 
+                    meal={{
+                      ...meal,
+                      totalCost: meal.cost,
+                      costPerServing: meal.cost / meal.servings,
+                      ingredientBreakdown: meal.ingredients?.map(ing => ({
+                        name: ing.name,
+                        quantity: ing.quantity,
+                        unit: ing.unit,
+                        price: ing.cost / ing.quantity,
+                        totalCost: ing.cost
+                      }))
+                    }} 
+                  />
                 ))}
               </CardContent>
             </Card>
-          ))}
+          )}
+
+          {/* Quick Day Jump Buttons (for plans with many days) */}
+          {generatedPlan.daysData.length > 5 && (
+            <div className="flex flex-wrap justify-center gap-2 pt-2">
+              {generatedPlan.daysData.map((day, index) => (
+                <Button
+                  key={index}
+                  variant={index === currentDayIndex ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setCurrentDayIndex(index)}
+                  className="min-w-[60px]"
+                >
+                  Day {day.day}
+                </Button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="flex justify-center">
@@ -372,11 +474,12 @@ export default function Planner() {
     )
   }
 
+  // Render form view
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold mb-2">Meal Planner</h1>
-        <p className="text-neutral-600">Create a personalized meal plan based on your preferences</p>
+        <h1 className="text-3xl font-bold mb-2">AI Meal Planner</h1>
+        <p className="text-neutral-600">Create a personalized meal plan powered by AI</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -388,6 +491,17 @@ export default function Planner() {
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-[24px]">
+                {/* API Error Alert */}
+                {apiError && (
+                  <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium text-red-800">Failed to generate meal plan</p>
+                      <p className="text-sm text-red-600 mt-1">{apiError}</p>
+                    </div>
+                  </div>
+                )}
+
                 {/* Budget Input */}
                 <div className="space-y-2">
                   <Label htmlFor="budget">Budget (RM)</Label>
@@ -486,7 +600,11 @@ export default function Planner() {
                     <SelectContent>
                       <SelectItem value="normal">Normal</SelectItem>
                       <SelectItem value="vegetarian">Vegetarian</SelectItem>
+                      <SelectItem value="vegan">Vegan</SelectItem>
                       <SelectItem value="high-protein">High Protein</SelectItem>
+                      <SelectItem value="low-carb">Low Carb</SelectItem>
+                      <SelectItem value="keto">Keto</SelectItem>
+                      <SelectItem value="halal">Halal</SelectItem>
                     </SelectContent>
                   </Select>
                   {errors.diet && (
@@ -499,21 +617,39 @@ export default function Planner() {
                   )}
                 </div>
 
-                {/* Submit Button - Sticky on Mobile */}
+                {/* Location Input (Optional) */}
+                <div className="space-y-2">
+                  <Label htmlFor="location" className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4" />
+                    Location (Optional)
+                  </Label>
+                  <Input
+                    id="location"
+                    type="text"
+                    placeholder="Enter postcode or area (e.g., 50000 KL)"
+                    value={formData.location}
+                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                  />
+                  <p className="text-xs text-neutral-500">
+                    Add your location to include nearby restaurant options in your plan
+                  </p>
+                </div>
+
+                {/* Submit Button */}
                 <div className="flex justify-center pt-6">
                   <Button 
                     type="submit" 
                     size="lg" 
-                    className="w-full md:w-auto px-8 md:sticky md:bottom-4 z-40"
+                    className="w-full md:w-auto px-8"
                     disabled={isGenerating}
                   >
                     {isGenerating ? (
                       <>
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Generating Plan...
+                        Generating AI Plan...
                       </>
                     ) : (
-                      'Generate Plan'
+                      'Generate AI Meal Plan'
                     )}
                   </Button>
                 </div>
@@ -533,7 +669,8 @@ export default function Planner() {
                 <Carrot className="absolute bottom-4 right-4 h-10 w-10 text-primary/30" />
                 <div className="text-center">
                   <Utensils className="h-24 w-24 text-primary/20 mx-auto mb-4" />
-                  <p className="text-sm text-neutral-600">Food Icons</p>
+                  <p className="text-sm text-neutral-600 font-medium">Powered by Claude AI</p>
+                  <p className="text-xs text-neutral-500 mt-1">Intelligent meal planning</p>
                 </div>
               </div>
             </CardContent>
