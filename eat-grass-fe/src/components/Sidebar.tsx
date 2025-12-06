@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 import { cn } from '@/lib/utils'
-import { Menu, X, Home, Calendar, Navigation, Save, Users, User, Settings, Trophy } from 'lucide-react'
+import { Menu, X, Home, Calendar, Navigation, Save, Users, User, Settings, Trophy, Receipt } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useSidebar } from '@/contexts/SidebarContext'
 
@@ -9,6 +9,7 @@ const navItems = [
   { path: '/planner', label: 'Planner', icon: Calendar },
   { path: '/find-food-nearby', label: 'Find Food Nearby', icon: Navigation },
   { path: '/grocery-game', label: 'Price Game', icon: Trophy },
+  { path: '/receipt-verification', label: 'Receipt Game', icon: Receipt },
   { path: '/saved-plans', label: 'Saved Plans', icon: Save },
   { path: '/social-feed', label: 'Social Feed', icon: Users },
   { path: '/profile', label: 'Profile', icon: User },

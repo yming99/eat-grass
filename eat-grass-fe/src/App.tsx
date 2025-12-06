@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { ThemeProvider } from './contexts/ThemeContext'
 import AppLayout from './layouts/AppLayout'
 import Home from './pages/Home'
 import MealDetails from './pages/MealDetails'
@@ -14,23 +15,25 @@ import ReceiptVerification from './pages/ReceiptVerification'
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<AppLayout />}>
-          <Route index element={<Home />} />
-          <Route path="meal/:id" element={<MealDetails />} />
-          <Route path="planner" element={<Planner />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="cook" element={<Cook />} />
-          <Route path="find-food-nearby" element={<FindFoodNearby />} />
-          <Route path="grocery-game" element={<GroceryGame />} />
-          <Route path="receipt-verification" element={<ReceiptVerification />} />
-          <Route path="saved-plans" element={<SavedPlans />} />
-          <Route path="social-feed" element={<SocialFeed />} />
-          <Route path="settings" element={<Settings />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<AppLayout />}>
+            <Route index element={<Home />} />
+            <Route path="meal/:id" element={<MealDetails />} />
+            <Route path="planner" element={<Planner />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="cook" element={<Cook />} />
+            <Route path="find-food-nearby" element={<FindFoodNearby />} />
+            <Route path="grocery-game" element={<GroceryGame />} />
+            <Route path="receipt-verification" element={<ReceiptVerification />} />
+            <Route path="saved-plans" element={<SavedPlans />} />
+            <Route path="social-feed" element={<SocialFeed />} />
+            <Route path="settings" element={<Settings />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   )
 }
 

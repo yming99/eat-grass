@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
@@ -11,17 +11,23 @@ import {
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { Mail, Trash2, AlertTriangle } from 'lucide-react'
+import { useTheme } from '@/contexts/ThemeContext'
 import settingsData from '@/data/settings.json'
 
 export default function Settings() {
+  const { theme, setTheme } = useTheme()
   const [settings, setSettings] = useState({
     currency: 'MYR',
     units: (settingsData.preferences.units || 'metric') as 'metric' | 'imperial',
-    theme: (settingsData.preferences.theme || 'light') as 'light' | 'green',
     promotionalAlerts: true,
     priceDropAlerts: true,
     mealReminders: settingsData.notifications.mealReminders ?? true,
   })
+
+  // Sync theme from context
+  useEffect(() => {
+    // Theme is managed by ThemeContext
+  }, [theme])
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
@@ -49,37 +55,39 @@ export default function Settings() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="currency">Currency</Label>
+            <Label htmlFor="currency-select">Currency</Label>
             <Select
+              key="currency-select"
               value={settings.currency}
               onValueChange={(value) => setSettings({ ...settings, currency: value })}
             >
-              <SelectTrigger id="currency">
-                <SelectValue />
+              <SelectTrigger id="currency-select" className="w-full">
+                <SelectValue placeholder="Select currency" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="MYR">MYR (Malaysian Ringgit)</SelectItem>
-                <SelectItem value="USD">USD (US Dollar)</SelectItem>
-                <SelectItem value="SGD">SGD (Singapore Dollar)</SelectItem>
-                <SelectItem value="THB">THB (Thai Baht)</SelectItem>
+              <SelectContent key="currency-content" className="z-[100]">
+                <SelectItem key="myr" value="MYR">MYR (Malaysian Ringgit)</SelectItem>
+                <SelectItem key="usd" value="USD">USD (US Dollar)</SelectItem>
+                <SelectItem key="sgd" value="SGD">SGD (Singapore Dollar)</SelectItem>
+                <SelectItem key="thb" value="THB">THB (Thai Baht)</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="units">Measurement Units</Label>
+            <Label htmlFor="units-select">Measurement Units</Label>
             <Select
+              key="units-select"
               value={settings.units}
               onValueChange={(value) =>
                 setSettings({ ...settings, units: value as 'metric' | 'imperial' })
               }
             >
-              <SelectTrigger id="units">
-                <SelectValue />
+              <SelectTrigger id="units-select" className="w-full">
+                <SelectValue placeholder="Select units" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="metric">Metric (kg, g, L, mL)</SelectItem>
-                <SelectItem value="imperial">Imperial (lb, oz, fl oz)</SelectItem>
+              <SelectContent key="units-content" className="z-[100]">
+                <SelectItem key="metric" value="metric">Metric (kg, g, L, mL)</SelectItem>
+                <SelectItem key="imperial" value="imperial">Imperial (lb, oz, fl oz)</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -149,33 +157,46 @@ export default function Settings() {
         <CardContent>
           <div className="grid grid-cols-2 gap-4">
             <button
-              onClick={() => setSettings({ ...settings, theme: 'light' })}
+              onClick={() => setTheme('light')}
               className={`p-4 rounded-lg border-2 transition-all ${
-                settings.theme === 'light'
-                  ? 'border-primary bg-primary/5'
+                theme === 'light'
+                  ? 'border-primary bg-primary/5 shadow-md'
                   : 'border-neutral-200 hover:border-neutral-300'
               }`}
             >
               <div className="text-center space-y-2">
-                <div className="w-full h-16 bg-white rounded border-2 border-neutral-200"></div>
+                <div className="w-full h-16 bg-white rounded border-2 border-neutral-200 flex items-center justify-center">
+                  <div className="w-8 h-8 bg-neutral-100 rounded"></div>
+                </div>
                 <p className="font-medium">Light</p>
+                {theme === 'light' && (
+                  <p className="text-xs text-primary font-semibold">Active</p>
+                )}
               </div>
             </button>
 
             <button
-              onClick={() => setSettings({ ...settings, theme: 'green' })}
+              onClick={() => setTheme('green')}
               className={`p-4 rounded-lg border-2 transition-all ${
-                settings.theme === 'green'
-                  ? 'border-primary bg-primary/5'
+                theme === 'green'
+                  ? 'border-primary bg-primary/5 shadow-md'
                   : 'border-neutral-200 hover:border-neutral-300'
               }`}
             >
               <div className="text-center space-y-2">
-                <div className="w-full h-16 bg-primary/20 rounded border-2 border-primary"></div>
+                <div className="w-full h-16 bg-gradient-to-br from-green-50 to-green-100 rounded border-2 border-primary flex items-center justify-center">
+                  <div className="w-8 h-8 bg-primary rounded"></div>
+                </div>
                 <p className="font-medium">Green</p>
+                {theme === 'green' && (
+                  <p className="text-xs text-primary font-semibold">Active</p>
+                )}
               </div>
             </button>
           </div>
+          <p className="text-sm text-neutral-600 mt-4 text-center">
+            Theme changes apply immediately across the app
+          </p>
         </CardContent>
       </Card>
 

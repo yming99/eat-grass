@@ -4,13 +4,18 @@ import Sidebar from '@/components/Sidebar'
 import BottomNav from '@/components/BottomNav'
 import Footer from '@/components/Footer'
 import { SidebarProvider, useSidebar } from '@/contexts/SidebarContext'
+import { useTheme } from '@/contexts/ThemeContext'
 import { cn } from '@/lib/utils'
 
 function AppLayoutContent() {
   const { isExpanded } = useSidebar()
+  const { theme } = useTheme()
   
   return (
-    <div className="min-h-screen bg-[#FFFDF6]">
+    <div className={cn(
+      "min-h-screen transition-colors duration-300",
+      theme === 'green' ? 'bg-gradient-to-br from-green-50 to-green-100/50' : 'bg-[#FFFDF6]'
+    )}>
       <Navbar />
       <div className="flex pt-[60px] md:pt-20">
         <Sidebar />
