@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { ChefHat, Navigation, Utensils } from 'lucide-react'
+import { ChefHat, Navigation, Utensils, Trophy } from 'lucide-react'
 
 export default function Home() {
   return (
@@ -36,7 +36,7 @@ export default function Home() {
       {/* Quick Actions */}
       <section className="py-8 md:py-12">
         <h2 className="text-2xl font-bold mb-6">Get Started</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Cook at Home */}
           <Card className="hover:shadow-lg transition-shadow cursor-pointer group">
             <Link to="/cook">
@@ -74,6 +74,28 @@ export default function Home() {
                     </p>
                     <Button variant="outline" className="w-full sm:w-auto">
                       Find Nearby
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Link>
+          </Card>
+
+          {/* Grocery Price Game */}
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer group">
+            <Link to="/grocery-game">
+              <CardContent className="p-6">
+                <div className="flex items-start gap-4">
+                  <div className="p-4 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-colors">
+                    <Trophy className="h-8 w-8 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold mb-2">Price Guessing Game</h3>
+                    <p className="text-neutral-600 mb-4">
+                      Test your knowledge! Guess prices at Lotus vs AEON and earn XP
+                    </p>
+                    <Button variant="outline" className="w-full sm:w-auto">
+                      Play Game
                     </Button>
                   </div>
                 </div>

@@ -1,0 +1,67 @@
+[
+  {
+    "id": "grocery-1",
+    "name": "Eggs 10pcs",
+    "image": "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f",
+    "lotus_price": 5.50,
+    "aeon_price": 6.20,
+    "category": "Dairy & Eggs"
+  },
+  {
+    "id": "grocery-2",
+    "name": "Fresh Chicken 1kg",
+    "image": "https://images.unsplash.com/photo-1604503468506-a8da13d82791",
+    "lotus_price": 12.90,
+    "aeon_price": 13.50,
+    "category": "Meat & Poultry"
+  },
+  {
+    "id": "grocery-3",
+    "name": "White Rice 5kg",
+    "image": "https://images.unsplash.com/photo-1586201375761-83865001e31c",
+    "lotus_price": 18.90,
+    "aeon_price": 19.50,
+    "category": "Grains & Staples"
+  },
+  {
+    "id": "grocery-4",
+    "name": "Cooking Oil 1L",
+    "image": "https://images.unsplash.com/photo-1474979266404-7ea07bcc6dbb",
+    "lotus_price": 8.90,
+    "aeon_price": 9.20,
+    "category": "Cooking Essentials"
+  },
+  {
+    "id": "grocery-5",
+    "name": "Tomatoes 1kg",
+    "image": "https://images.unsplash.com/photo-1546470427-e26264be0b01",
+    "lotus_price": 4.50,
+    "aeon_price": 5.00,
+    "category": "Vegetables"
+  },
+  {
+    "id": "grocery-6",
+    "name": "Milk 1L",
+    "image": "https://images.unsplash.com/photo-1563636619-e9143da7973b",
+    "lotus_price": 7.90,
+    "aeon_price": 8.50,
+    "category": "Dairy & Eggs"
+  },
+  {
+    "id": "grocery-7",
+    "name": "Bread White Loaf",
+    "image": "https://images.unsplash.com/photo-1509440159596-0249088772ff",
+    "lotus_price": 3.50,
+    "aeon_price": 4.00,
+    "category": "Bakery"
+  },
+  {
+    "id": "grocery-8",
+    "name": "Onions 1kg",
+    "image": "https://images.unsplash.com/photo-1518977822534-7049a61ee0c2",
+    "lotus_price": 3.90,
+    "aeon_price": 4.20,
+    "category": "Vegetables"
+  }
+]
+

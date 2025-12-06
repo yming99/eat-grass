@@ -9,6 +9,8 @@ import SocialFeed from './pages/SocialFeed'
 import Settings from './pages/Settings'
 import Cook from './pages/Cook'
 import FindFoodNearby from './pages/FindFoodNearby'
+import GroceryGame from './pages/GroceryGame'
+import ReceiptVerification from './pages/ReceiptVerification'
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="cook" element={<Cook />} />
           <Route path="find-food-nearby" element={<FindFoodNearby />} />
+          <Route path="grocery-game" element={<GroceryGame />} />
+          <Route path="receipt-verification" element={<ReceiptVerification />} />
           <Route path="saved-plans" element={<SavedPlans />} />
           <Route path="social-feed" element={<SocialFeed />} />
           <Route path="settings" element={<Settings />} />

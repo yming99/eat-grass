@@ -62,6 +62,9 @@ export default function Navbar() {
               <DropdownMenuItem onClick={() => navigate("/profile")}>
                 View Profile
               </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/grocery-game")}>
+                Price Guessing Game
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => navigate("/saved-plans")}>
                 Saved Plans
               </DropdownMenuItem>
