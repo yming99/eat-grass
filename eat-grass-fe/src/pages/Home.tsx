@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { ChefHat, Navigation, Utensils, Trophy } from 'lucide-react'
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ChefHat, Navigation, Trophy } from "lucide-react";
+import VegetableTrayScene from "@/components/three/VegetableTrayScene";
 
 export default function Home() {
   return (
@@ -15,20 +16,26 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="py-12 md:py-20 relative">
-        <div className="max-w-[620px]">
-          <h1 className="text-[32px] md:text-[48px] font-bold mb-4 md:mb-6 leading-tight">
-            Plan Your Meals, Save Your Budget
-          </h1>
-          <p className="text-xl font-medium text-neutral-700 mb-6 md:mb-8">
-            Discover delicious, budget-friendly meal plans tailored to your preferences and dietary needs.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button
-              asChild
-              className="rounded-full bg-primary hover:bg-primary/90 text-white px-8 py-6 text-base md:text-lg font-semibold"
-            >
-              <Link to="/planner">Start Planning</Link>
-            </Button>
+        <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8 lg:gap-12">
+          <div className="flex-1 max-w-[620px]">
+            <h1 className="text-[32px] md:text-[48px] font-bold mb-4 md:mb-6 leading-tight">
+              Plan Your Meals, Save Your Budget
+            </h1>
+            <p className="text-xl font-medium text-neutral-700 mb-6 md:mb-8">
+              Discover delicious, budget-friendly meal plans tailored to your
+              preferences and dietary needs.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button
+                asChild
+                className="rounded-full bg-primary hover:bg-primary/90 text-white px-8 py-6 text-base md:text-lg font-semibold"
+              >
+                <Link to="/planner">Start Planning</Link>
+              </Button>
+            </div>
+          </div>
+          <div className="flex-1 w-full lg:max-w-[500px]">
+            <VegetableTrayScene />
           </div>
         </div>
       </section>
@@ -48,7 +55,8 @@ export default function Home() {
                   <div className="flex-1">
                     <h3 className="text-xl font-bold mb-2">Cook at Home</h3>
                     <p className="text-neutral-600 mb-4">
-                      Browse recipes, find ingredients, and plan your home-cooked meals
+                      Browse recipes, find ingredients, and plan your
+                      home-cooked meals
                     </p>
                     <Button variant="outline" className="w-full sm:w-auto">
                       Explore Recipes
@@ -70,7 +78,8 @@ export default function Home() {
                   <div className="flex-1">
                     <h3 className="text-xl font-bold mb-2">Find Food Nearby</h3>
                     <p className="text-neutral-600 mb-4">
-                      Discover restaurants, takeout options, and grocery stores near you
+                      Discover restaurants, takeout options, and grocery stores
+                      near you
                     </p>
                     <Button variant="outline" className="w-full sm:w-auto">
                       Find Nearby
@@ -90,9 +99,12 @@ export default function Home() {
                     <Trophy className="h-8 w-8 text-primary" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold mb-2">Price Guessing Game</h3>
+                    <h3 className="text-xl font-bold mb-2">
+                      Price Guessing Game
+                    </h3>
                     <p className="text-neutral-600 mb-4">
-                      Test your knowledge! Guess prices at Lotus vs AEON and earn XP
+                      Test your knowledge! Guess prices at Lotus vs AEON and
+                      earn XP
                     </p>
                     <Button variant="outline" className="w-full sm:w-auto">
                       Play Game
@@ -105,6 +117,5 @@ export default function Home() {
         </div>
       </section>
     </div>
-  )
+  );
 }
-
